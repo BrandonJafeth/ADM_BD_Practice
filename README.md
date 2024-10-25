@@ -1,4 +1,4 @@
-# Nombre del Repositorio SQL Server
+# Salvar Administración de Base De Datos
 
 ## Descripción
 Este repositorio ha sido creado para practicar diferentes consultas (queries) y así prepararse de manera efectiva para el curso de administración de bases de datos. El objetivo es realizar suficientes ejercicios prácticos para que las evaluaciones resulten más sencillas.
@@ -41,20 +41,20 @@ GO
 ```
 
 ## Control de Flujos y Transacciones
-Detallar cómo se manejan las transacciones y los controles de flujo en los scripts SQL. Por ejemplo:
+Las transacciones permiten agrupar una o varias operaciones SQL para garantizar que todas se ejecuten de forma completa o ninguna se aplique, garantizando la integridad de los datos. El control de flujo maneja la lógica dentro de los scripts SQL mediante estructuras como `TRY...CATCH` para gestionar errores y ejecutar operaciones críticas con seguridad.
 
-- **Transacciones en procedimientos**: Describe cómo se utilizan las transacciones para garantizar la integridad de los datos en operaciones críticas.
-  - **Ejemplo**:
-    ```sql
-    GO
-    BEGIN TRANSACTION;
-    TRY
-      -- Instrucciones SQL
-      COMMIT TRANSACTION;
-    CATCH
-      ROLLBACK TRANSACTION;
-    END TRY
-    GO
+### Sintaxis para el Uso de Transacciones
+```sql
+BEGIN TRANSACTION;
+BEGIN TRY
+    -- Instrucciones SQL
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT 'Error: Se ha revertido la transacción.';
+END CATCH;
+
     ```
 
 
