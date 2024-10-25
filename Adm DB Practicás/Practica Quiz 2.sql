@@ -217,7 +217,7 @@ GO
 
 
 
-
+-- Hacer copias de las tablas 
 Use Pubs
 go
 Select * into copiatitles3 from titles
@@ -237,25 +237,26 @@ Select productos2.NombreProducto, productos2.IdProducto From productos2
 GO
 
 
-
-
-
-
-
-Go
-Exec sp_help Productos
-Go
-
-
-
 Use Datos
 Go
 Select * into myrutas from datos..rutas
 
 Go
+--Aqui termina 
 
 
 
+
+
+-- Para buscar los campos de una tabla
+Go
+Exec sp_help SuperTitles
+Go
+-- Aqui termina 
+
+
+
+-- Practica Control de flujos
 GO
 Delete from myrutas 
 Where Distrito like '%maria%'
@@ -268,3 +269,63 @@ select 'Un registro eliminado'
 else 
 select 'Se elimino más de un registro'
 Go
+--
+--Practica Procedimiento almacenado
+
+Use pubs
+go
+CREATE PROC proc_author_info
+(
+@lname varchar(40), 
+@fname varchar(20)
+)
+AS
+Select au_lname, au_fname, title
+from authors,titles, titleauthor
+
+Where 
+
+au_fname = @fname
+AND au_lname = @lname
+AND authors.au_id = titleauthor.au_id
+AND titles.title_id = titleauthor.title_id
+RETURN
+GO
+
+
+ exec proc_author_info @fname='Albert',@lname='Ringer'
+-- !!!!!!!!!!!!! no importa el orden de la variable !!!!!!!!!!!!! --
+
+ exec proc_author_info 'Ringer', 'Albert'
+ exec proc_author_info 'Albert', 'Ringer'  -----incorrecto por orden porque aqui no se especifica la variable 
+
+ --Termina el procedimiento 
+
+-- Practica Vistas
+
+GO
+Create VIEW Product_Comprado
+AS
+SELECT Ventas.IdVenta, 
+Clientes.Nombre AS CLIENTE,
+Productos.NombreProducto AS ProductoComprado 
+FROM 
+Clientes 
+ 
+ INNER JOIN Ventas ON Clientes.IdCliente = Ventas.IdVenta
+ INNER JOIN  DetalleVentas ON Ventas.IdVenta = DetalleVentas.IdVenta
+INNER JOIN Productos ON Productos.IdProducto = DetalleVentas.IdProducto
+WITH CHECK OPTION
+GO
+
+Select * from Product_Comprado
+
+Drop view Product_Comprado
+
+
+
+
+
+
+
+---Terminan las vistas
