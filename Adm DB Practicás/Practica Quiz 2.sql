@@ -323,14 +323,29 @@ AND  publishers.country = 'USA'
 WITH CHECK OPTION
 GO
 
+Exec sp_help rutas
 
 Drop view Publicaciones
 
 Select * from Publicaciones
+drop view InfoClien
 
 
+Use Datos
+go
+Create view InfoClien
+As
+Select clientes.NCEDULA, CONCAT(clientes.NNOMBRE,clientes.IAPELLI,clientes.IIAPELL) AS NombreCliente, saldos.SAMONTO, rutas.DISTRITO
 
+from clientes 
 
+INNER JOIN saldos ON saldos.NCEDULA = clientes.NCEDULA
+INNER JOIN rutas ON clientes.CODRUTA = rutas.CODRUTA
+Where 
+rutas.DISTRITO = 'Nicoya'
+go
+
+Select * from InfoClien
 ---Terminan las vistas
 
 
@@ -476,7 +491,6 @@ GO
 
 
 SELECT * FROM dbo.fn_Searchforidtitle('BU1032');
-
 
 
 
