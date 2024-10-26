@@ -303,29 +303,182 @@ GO
 
 -- Practica Vistas
 
-GO
-Create VIEW Product_Comprado
-AS
-SELECT Ventas.IdVenta, 
-Clientes.Nombre AS CLIENTE,
-Productos.NombreProducto AS ProductoComprado 
-FROM 
-Clientes 
- 
- INNER JOIN Ventas ON Clientes.IdCliente = Ventas.IdVenta
- INNER JOIN  DetalleVentas ON Ventas.IdVenta = DetalleVentas.IdVenta
-INNER JOIN Productos ON Productos.IdProducto = DetalleVentas.IdProducto
-WITH CHECK OPTION
-GO
 
-Select * from Product_Comprado
 
 Drop view Product_Comprado
 
 
+Use pubs
+Go
+Create View Publicaciones
+AS
 
+Select publishers.pub_name AS Nombrepublicacion, publishers.state AS Estado, publishers.city As Ciudad, titles.title As Titulo,  titles.price AS Precio, publishers.country
+
+from publishers, titles
+
+Where 
+publishers.pub_id = titles.pub_id
+AND  publishers.country = 'USA'
+WITH CHECK OPTION
+GO
+
+
+Drop view Publicaciones
+
+Select * from Publicaciones
 
 
 
 
 ---Terminan las vistas
+
+
+
+--Practica Funciones de numeros
+
+create function f_promedio 
+( @valor1 decimal(4,2), @valor2 decimal(4,2)
+)
+
+returns decimal (6,2)
+-- se pone 6 porque el valor se puede pasar de 4 
+--tener cuiadado con el consumo de recursos, de no sacrificarlo por completo 
+--importante la "s" en el return
+as
+Begin
+  declare @resultado decimal(6,2)
+  -- puedo usar SET 
+  select @resultado = ( @valor1 + @valor2 ) / 2
+
+  return @resultado
+End;
+go
+
+
+Go
+Create function fn_suma 
+(
+@valor1 decimal(4,2),
+@Valor2 decimal(4,2)
+)
+returns decimal(6,2)
+AS 
+BEGIN
+Declare @resultado decimal(6,2)
+
+select @resultado = @valor1 + @Valor2
+
+return @resultado
+
+end
+
+Go
+
+select dbo.fn_suma(2,3.6)
+---
+
+
+Go
+CREATE FUNCTION fn_Multiplicación
+(
+@valor1 int,
+@valor2 int
+)
+
+RETURNS int
+
+AS
+BEGIN 
+DECLARE @RESULTADO int
+
+SELECT @RESULTADO = @valor1 * @valor2
+
+RETURN @RESULTADO
+end;
+
+GO
+
+SELECT dbo.fn_Multiplicación(3,20)
+
+--Practica funciones de tablas 
+
+Use Datos
+go
+create function f_Cliente (@CodiRuta varchar(6))
+
+returns table
+as
+Return
+-- importante el return 
+(
+   select * from rutas
+   where CODRUTA = @CodiRuta
+)
+go
+
+select * from dbo.f_Cliente('508002')
+
+
+--Practica parecida
+Use PracticaJoins 
+GO
+Create function fn_codigoruta
+(
+
+@Codru INT
+)
+
+returns table
+
+Return
+(
+Select * from clientes
+where Clientes.CodRuta = @Codru
+)
+
+GO
+
+
+select * from dbo.fn_codigoruta(101)
+
+
+
+--Practicas pareccidas a quiz anterior
+
+select * from titles
+Exec sp_help titleauthor
+
+Use Pubs 
+Go
+Create Function fn_Searchforidtitle
+(
+
+@IdTitle varchar(6)
+)
+
+RETURNS TABLE 
+
+RETURN
+(
+
+Select titles.title, titles.type, titles.price, CONCAT(authors.au_lname, ' ', authors.au_fname)AS NombreAutor,  authors.phone,authors.city, authors.state 
+
+from titles, authors, titleauthor
+
+where 
+
+titles.title_id = titleauthor.title_id
+AND authors.au_id = titleauthor.au_id
+AND @IdTitle = titles.title_id
+)
+GO
+
+
+SELECT * FROM dbo.fn_Searchforidtitle('BU1032');
+
+
+
+
+
+--
