@@ -3,6 +3,9 @@
 
 -- Estructuras de los temas vistos en el curso para este ultimo examen 
 
+
+-------------------------------------------------------------------Transacción--------------------------------------------------------------------------------------------------------------
+
 USE NombreBaseDeDatos;  
 GO
 
@@ -92,4 +95,47 @@ COMMIT TRAN
 END
 
 GO
+
+
+---------------------------------------------------------------------Final----------------------------------------------------------------------------------------------------------
+
+
+
+
+-------------------------------------------------------------------Vista--------------------------------------------------------------------------------------------------------------
+
+
+
+USE Northwind 
+
+GO 
+
+
+IF OBJECT_ID('dbo.Nombredelavista','V') IS NOT NULL
+BEGIN 
+
+DROP VIEW dbo.Nombredelavista
+END
+
+GO
+
+
+Go
+-- Primero se crea la vista y se le pone un nombre
+CREATE VIEW Nombredelavista
+AS --IMPORTANTE EL AS SIEMPRE VA
+
+--Estructura de la consulta que se quiere realizar 
+Select Employees.FirstName From Employees 
+
+WITH CHECK OPTION -- Propiedad para poder modificar la vista
+Go
+
+
+-- Practica De Vista 
+
+
+
+
+
 
