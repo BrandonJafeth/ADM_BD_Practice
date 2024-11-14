@@ -41,3 +41,55 @@ BEGIN
 END;
 
 GO
+
+
+
+-- Practica De transacción 
+
+Select * from Employees
+
+Use Northwind 
+GO
+
+IF OBJECT_ID('Northwind.dbo.JunniorEmployees', 'U') IS NOT NULL
+BEGIN
+    DROP TABLE Northwind.dbo.JunniorEmployees;
+    PRINT 'La tabla JuniorEmployees existía, por lo cual se eliminó.';
+END
+GO
+
+
+
+
+
+GO
+BEGIN TRAN
+
+Select * into dbo.JunniorEmployees from Employees
+
+
+DELETE FROM JunniorEmployees 
+WHERE DATEDIFF(YEAR,HireDate,GETDATE()) >= 5;
+
+
+DECLARE @TOTALEMPLEADOS  INT 
+
+SELECT  @TOTALEMPLEADOS = COUNT(*) from JunniorEmployees
+
+
+IF @TOTALEMPLEADOS < 4
+
+BEGIN 
+
+ROLLBACK 
+PRINT 'No se pudo realizar la operación porque el numero de empleados :'  + CAST(@TOTALEMPLEADOS AS VARCHAR);
+
+END
+ELSE
+BEGIN 
+COMMIT TRAN 
+ PRINT 'Se realizó la transacción con éxito. Número de empleados restantes: ' + CAST(@TOTALEMPLEADOS AS VARCHAR);
+END
+
+GO
+
